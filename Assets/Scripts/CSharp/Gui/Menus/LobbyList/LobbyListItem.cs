@@ -121,6 +121,8 @@ namespace kobk.csharp.gui.controller
         {
             UpdateUI();
 
+            if(hasAuthority)
+                MainMenuController.active.updateReadyButton(isReady);
             MainMenuController.active.ReadyCheck();
         }
         public void HandleModeChange(GameModes old, GameModes newV) {
@@ -156,8 +158,6 @@ namespace kobk.csharp.gui.controller
             TeamSel.AddOptions(ModeTeamOptions[(int)mode].ToList());
             TeamSel.value = team;
             TeamSel.RefreshShownValue();
-
-            Debug.Log(team);
         }
 
         public void onDropdownValueChange() {
@@ -198,7 +198,8 @@ namespace kobk.csharp.gui.controller
             if(!isLeader) return;
 
             //start Game
-            Debug.Log("Tried to start");
+            Debug.Log("Starting Game...");
+            room.StartGame();
         }
 
     }

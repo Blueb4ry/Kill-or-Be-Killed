@@ -17,7 +17,7 @@ namespace kobk.csharp.gui.controller
     {
         //static variables
         public static MainMenuController active = null;
-        public static string[] GameModeOptions = {"Normal", "All Ninjas", "All Ninja Teams"};
+        public static string[] GameModeOptions = { "Normal", "All Ninjas", "All Ninja Teams" };
 
         //Serialized Variables
         [Header("Related Objects")]
@@ -49,6 +49,7 @@ namespace kobk.csharp.gui.controller
         [SerializeField] private TextMeshProUGUI connectingLoadIpDump;
 
         [Header("Lobby Menu")]
+        [SerializeField] private GameObject ParentForLobbyListings;
         [SerializeField] private Button startBtn;
         [SerializeField] private TextChangingButton startTCBtn;
         [SerializeField] private TextChangingButton readBtn;
@@ -88,16 +89,29 @@ namespace kobk.csharp.gui.controller
 
             if (active != null)
             {
-                sel = 5;
-                moveTo(5);
+                networkManager = NetworkManager.singleton as NetworkManagerLobby;
+                teleTransport = networkManager.gameObject.GetComponent<TelepathyTransport>();
+                networkManager.ParentFolder = ParentForLobbyListings.transform;
+                hostIPCheck = active.hostIPCheck;
 
-                playerName = active.playerName;
-                connectedIP = active.connectedIP;
-                port = active.port;
-                MaxPlayers = active.MaxPlayers;
-                isLeader = active.isLeader;
-                isHosting = false;
-                prepedForReady = false;
+                if (networkManager.isNetworkActive)
+                {
+                    sel = 5;
+                    moveTo(5);
+
+                    playerName = active.playerName;
+                    connectedIP = active.connectedIP;
+                    port = active.port;
+                    MaxPlayers = active.MaxPlayers;
+                    isLeader = active.isLeader;
+                    isHosting = false;
+                    prepedForReady = false;
+
+                } else {
+                   throwErrorScreen("Unexpected Disconnection"); 
+                }
+
+                active = this;
             }
             else
             {
@@ -248,27 +262,35 @@ namespace kobk.csharp.gui.controller
 
         }
 
-        public void setupSettingMenu() {
-            if(isHosting) {
+        public void setupSettingMenu()
+        {
+            if (isHosting)
+            {
                 ClientGameModeFolder.SetActive(false);
                 GameModeChangeField.AddOptions(GameModeOptions.ToList());
                 GameModeChangeField.value = 0;
                 GameModeChangeField.RefreshShownValue();
-            } else {
+            }
+            else
+            {
 
                 //Gamemode change
                 HostGameModeFolder.SetActive(false);
             }
         }
 
-        public void updateSettingMenu() {
+        public void updateSettingMenu()
+        {
             LobbyListItem i = networkManager.getListingWithAuthority();
 
-            if(isHosting) {
-                GameModeChangeField.value = (int) i.mode;
+            if (isHosting)
+            {
+                GameModeChangeField.value = (int)i.mode;
                 GameModeChangeField.RefreshShownValue();
-            } else {
-                GameModeClientField.text = GameModeOptions[(int) i.mode];
+            }
+            else
+            {
+                GameModeClientField.text = GameModeOptions[(int)i.mode];
             }
         }
 
