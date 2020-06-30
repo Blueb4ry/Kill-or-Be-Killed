@@ -123,7 +123,10 @@ namespace kobk.csharp.gui.controller
 
             MainMenuController.active.ReadyCheck();
         }
-        public void HandleModeChange(GameModes old, GameModes newV) => UpdateUI();
+        public void HandleModeChange(GameModes old, GameModes newV) {
+            UpdateUI();
+            MainMenuController.active.updateSettingMenu();
+        }
         public void HandleTeamChange(int old, int newV) => UpdateUI();
 
         public void UpdateUI()

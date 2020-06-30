@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +8,7 @@ using TMPro;
 using Mirror;
 using kobk.csharp.gui.fields;
 using kobk.csharp.network;
-using kobk.csharp.gui;
+using kobk.csharp.game.enumerations;
 
 namespace kobk.csharp.gui.controller
 {
@@ -16,6 +17,7 @@ namespace kobk.csharp.gui.controller
     {
         //static variables
         public static MainMenuController active = null;
+        public static string[] GameModeOptions = {"Normal", "All Ninjas", "All Ninja Teams"};
 
         //Serialized Variables
         [Header("Related Objects")]
@@ -50,6 +52,11 @@ namespace kobk.csharp.gui.controller
         [SerializeField] private Button startBtn;
         [SerializeField] private TextChangingButton startTCBtn;
         [SerializeField] private TextChangingButton readBtn;
+        [SerializeField] private TMP_InputField NameChangeField;
+        [SerializeField] private GameObject HostGameModeFolder;
+        [SerializeField] private GameObject ClientGameModeFolder;
+        [SerializeField] private TMP_Dropdown GameModeChangeField;
+        [SerializeField] private TextMeshProUGUI GameModeClientField;
         //[SerializeField] public Transform refTrans;
 
         //hidden variables
@@ -123,13 +130,18 @@ namespace kobk.csharp.gui.controller
             switch (n)
             {
                 case 2:
-                    if(string.IsNullOrEmpty(hostIPCheck)) {
+                    if (string.IsNullOrEmpty(hostIPCheck))
+                    {
                         hostIPCheck = new WebClient().DownloadString("http://icanhazip.com").Trim();
                     }
                     IpDump_Host.text = hostIPCheck;
-                break;
+                    break;
                 case 4:
                     connectingLoadIpDump.text = connectedIP;
+                    break;
+                case 5:
+                    setupSettingMenu();
+                    updateSettingMenu();
                     break;
             }
             // if (n == 4)
@@ -236,6 +248,30 @@ namespace kobk.csharp.gui.controller
 
         }
 
+        public void setupSettingMenu() {
+            if(isHosting) {
+                ClientGameModeFolder.SetActive(false);
+                GameModeChangeField.AddOptions(GameModeOptions.ToList());
+                GameModeChangeField.value = 0;
+                GameModeChangeField.RefreshShownValue();
+            } else {
+
+                //Gamemode change
+                HostGameModeFolder.SetActive(false);
+            }
+        }
+
+        public void updateSettingMenu() {
+            LobbyListItem i = networkManager.getListingWithAuthority();
+
+            if(isHosting) {
+                GameModeChangeField.value = (int) i.mode;
+                GameModeChangeField.RefreshShownValue();
+            } else {
+                GameModeClientField.text = GameModeOptions[(int) i.mode];
+            }
+        }
+
         public void updateReadyButton(bool s)
         {
             readBtn.selectedText = s ? 1 : 0;
@@ -280,6 +316,16 @@ namespace kobk.csharp.gui.controller
         {
             LobbyListItem i = networkManager.getListingWithAuthority();
             i.CmdSetReady(!i.isReady);
+        }
+
+        public void tryChangeName()
+        {
+            networkManager.getListingWithAuthority().CmdSetDisplayName(NameChangeField.text);
+        }
+
+        public void tryChangeGameMode()
+        {
+            networkManager.getListingWithAuthority().CmdChangeMode((GameModes)GameModeChangeField.value);
         }
 
         public void DisconnectMenu()
