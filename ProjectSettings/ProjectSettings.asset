@@ -637,6 +637,6 @@ PlayerSettings:
   projectName: KillOrBeKilled (1)
   organizationId: juegosludosgames
   cloudEnabled: 0
-  enableNativePlatformBackendsForNewInputSystem: 0
+  enableNativePlatformBackendsForNewInputSystem: 1
   disableOldInputManagerSupport: 0
   legacyClampBlendShapeWeights: 0
