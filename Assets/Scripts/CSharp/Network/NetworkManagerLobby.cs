@@ -13,7 +13,8 @@ namespace kobk.csharp.network
     public class NetworkManagerLobby : NetworkManager
     {
         //static constant variables
-        public const string LoadFolder = "LobbyLoad";
+        public const string LoadFolder = "Spawnables";
+        public static string QuitReason = string.Empty;
 
         //Serialized Variables
         [SerializeField] private int minPlayers = 2;
@@ -28,6 +29,7 @@ namespace kobk.csharp.network
         [SerializeField] private string gameScenePrefix;
         [SerializeField] public int selectedGameScene = 0;
         [SerializeField] private GamePlayerBase gamePlayerPrefab;
+        [SerializeField] private GameObject SpawnSystemPrefab;
 
         //hidden variables
 
@@ -39,11 +41,15 @@ namespace kobk.csharp.network
         public static event Action OnClientConnected;
         public static event Action onClientDisconnected;
 
+        public static event Action<NetworkConnection> onServerReady;
+
         //methods
 
-        public override void Awake() {
+        public override void Awake()
+        {
 
-            if(NetworkManager.singleton != null) {
+            if (NetworkManager.singleton != null)
+            {
                 Destroy(gameObject);
                 return;
             }
@@ -77,6 +83,10 @@ namespace kobk.csharp.network
             base.OnClientDisconnect(conn);
 
             onClientDisconnected?.Invoke();
+
+            if(SceneManager.GetActiveScene().name != menuScene) {
+                SceneManager.LoadSceneAsync(menuScene, LoadSceneMode.Single);
+            }
         }
 
         public override void OnServerConnect(NetworkConnection conn)
@@ -109,9 +119,18 @@ namespace kobk.csharp.network
         {
             if (conn.identity != null)
             {
-                var player = conn.identity.GetComponent<LobbyListItem>();
+                if (SceneManager.GetActiveScene().name.StartsWith(gameScenePrefix))
+                {
+                    var player = conn.identity.GetComponent<GamePlayerBase>();
 
-                playerListings.Remove(player);
+                    gamePlayerListings.Remove(player);
+                }
+                else
+                {
+                    var player = conn.identity.GetComponent<LobbyListItem>();
+
+                    playerListings.Remove(player);
+                }
             }
 
             base.OnServerDisconnect(conn);
@@ -120,6 +139,7 @@ namespace kobk.csharp.network
         public override void OnStopServer()
         {
             playerListings.Clear();
+            gamePlayerListings.Clear();
         }
 
         public LobbyListItem getListingWithAuthority()
@@ -139,7 +159,7 @@ namespace kobk.csharp.network
 
         public void StartGame()
         {
-            if(!MainMenuController.active.isEveryoneReady()) return;
+            if (!MainMenuController.active.isEveryoneReady()) return;
 
             if (SceneManager.GetActiveScene().name == menuScene)
             {
@@ -164,10 +184,25 @@ namespace kobk.csharp.network
 
                     NetworkServer.ReplacePlayerForConnection(conn, gamePlayerInstance.gameObject);
                 }
-            } 
+            }
 
             base.ServerChangeScene(newScene);
+        }
 
+        public override void OnServerSceneChanged(string SceneName)
+        {
+            if (SceneName.StartsWith(gameScenePrefix))
+            {
+                GameObject SpawnSystemInstance = Instantiate(SpawnSystemPrefab);
+                NetworkServer.Spawn(SpawnSystemInstance);
+            }
+        }
+
+        public override void OnServerReady(NetworkConnection conn)
+        {
+            base.OnServerReady(conn);
+
+            onServerReady?.Invoke(conn);
         }
 
     }

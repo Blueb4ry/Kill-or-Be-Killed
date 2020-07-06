@@ -52,6 +52,7 @@ namespace kobk.csharp.gui.controller
         [SerializeField] private GameObject ParentForLobbyListings;
         [SerializeField] private Button startBtn;
         [SerializeField] private TextChangingButton startTCBtn;
+        [SerializeField] private ImageChangingScript startIMCBtn;
         [SerializeField] private TextChangingButton readBtn;
         [SerializeField] private TMP_InputField NameChangeField;
         [SerializeField] private GameObject HostGameModeFolder;
@@ -108,7 +109,7 @@ namespace kobk.csharp.gui.controller
                     prepedForReady = false;
 
                 } else {
-                   throwErrorScreen("Unexpected Disconnection"); 
+                    throwErrorScreen( string.IsNullOrEmpty(NetworkManagerLobby.QuitReason)? "Unexpected Disconnect" : NetworkManagerLobby.QuitReason); 
                 }
 
                 active = this;
@@ -282,6 +283,7 @@ namespace kobk.csharp.gui.controller
         public void updateSettingMenu()
         {
             LobbyListItem i = networkManager.getListingWithAuthority();
+            if(i == null) return;
 
             if (isHosting)
             {
@@ -310,6 +312,7 @@ namespace kobk.csharp.gui.controller
                     prepedForReady = true;
 
                     startBtn.interactable = isLeader;
+                    startIMCBtn.selectedImg = isLeader ? 1 : 0;
                     startTCBtn.selectedText = isLeader ? 2 : 1;
                 }
             }
@@ -320,6 +323,7 @@ namespace kobk.csharp.gui.controller
                     prepedForReady = false;
 
                     startBtn.interactable = false;
+                    startIMCBtn.selectedImg = 0;
                     startTCBtn.selectedText = 0;
                 }
             }
