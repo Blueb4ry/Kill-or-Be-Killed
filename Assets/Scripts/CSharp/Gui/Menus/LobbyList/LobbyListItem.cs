@@ -158,6 +158,8 @@ namespace kobk.csharp.gui.controller
             TeamSel.AddOptions(ModeTeamOptions[(int)mode].ToList());
             TeamSel.value = team;
             TeamSel.RefreshShownValue();
+
+            MainMenuController.active.updateSettingMenu();
         }
 
         public void onDropdownValueChange() {
