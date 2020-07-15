@@ -15,6 +15,8 @@ namespace kobk.csharp.game.player
         public GameModes mode = GameModes.NORMAL;
         [SyncVar]
         public int team = 0;
+        [SyncVar]
+        public int id = -1;
 
         private NetworkManagerLobby _room;
         private NetworkManagerLobby room
@@ -29,7 +31,7 @@ namespace kobk.csharp.game.player
         public override void OnStartClient() {
             DontDestroyOnLoad(gameObject);
 
-            room.gamePlayerListings.Add(this);
+            room.gamePlayerListings.Add(id, this);
         }
 
         public override void OnStopClient() {
@@ -37,10 +39,11 @@ namespace kobk.csharp.game.player
         }
 
         [Server]
-        public void setupData(string name, GameModes mode, int team) {
+        public void setupData(string name, GameModes mode, int team, int id) {
             this.username = name;
             this.mode = mode;
             this.team = team;
+            this.id = id;
         }
         
     }

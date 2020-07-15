@@ -16,17 +16,19 @@ namespace kobk.csharp.gui.controller
         public static string[][] ModeTeamOptions = { new string[] { "Random", "Soliders", "Ninjas" }, new string[] { "Random", "Team A", "Team B" } };
 
         //serialized variables
-        [SerializeField] private TextMeshProUGUI NameField;
-        [SerializeField] private TextMeshProUGUI ReadyInd;
-        [SerializeField] private TMP_Dropdown TeamSel;
-        [SerializeField] private string readyText;
-        [SerializeField] private string notReadyText;
-        [SerializeField] private Color readyColor;
-        [SerializeField] private Color notReadyColor;
+        [SerializeField] private TextMeshProUGUI NameField = null;
+        [SerializeField] private TextMeshProUGUI ReadyInd = null;
+        [SerializeField] private TMP_Dropdown TeamSel = null;
+        [SerializeField] private string readyText = null;
+        [SerializeField] private string notReadyText = null;
+        [SerializeField] private Color readyColor = Color.green;
+        [SerializeField] private Color notReadyColor = Color.red;
 
         public bool isLeader = false;
 
         //properties
+        [SyncVar]
+        public int id = -1;
         [SyncVar(hook = nameof(HandleReadyChange))]
         public bool isReady = false;
         // public bool isReady
@@ -84,7 +86,7 @@ namespace kobk.csharp.gui.controller
         [SyncVar(hook = nameof(HandleTeamChange))]
         public int team = 0;
 
-        private NetworkManagerLobby _room;
+        private NetworkManagerLobby _room = null;
         private NetworkManagerLobby room
         {
             get
@@ -96,12 +98,15 @@ namespace kobk.csharp.gui.controller
 
         public override void OnStartAuthority()
         {
+            MainMenuController.active.NetId = id;
             CmdSetDisplayName(MainMenuController.active.playerName);
         }
 
         public override void OnStartClient()
         {
-            room.playerListings.Add(this);
+            if(id == -1)
+                Debug.Log("warn");
+            room.playerListings.Add(id, this);
             //this.gameObject.transform.parent = room.ParentFolder;
             this.gameObject.transform.SetParent(room.ParentFolder);
             this.gameObject.transform.localScale = Vector3.one;
@@ -188,7 +193,7 @@ namespace kobk.csharp.gui.controller
         public void CmdChangeMode(GameModes g) {
             if(!isLeader) return;
 
-            foreach(var player in room.playerListings) {
+            foreach(var player in room.playerListings.Values) {
                 player.mode = g;
                 player.team = 0;
             }
@@ -199,9 +204,22 @@ namespace kobk.csharp.gui.controller
         {
             if(!isLeader) return;
 
+            RpcInformLoading();
+
             //start Game
             Debug.Log("Starting Game...");
             room.StartGame();
+        }
+
+        [Server]
+        public void ServerInformLoading() {
+            RpcInformLoading();
+        }
+
+        [ClientRpc]
+        private void RpcInformLoading() {
+            MainMenuController.active.moveTo(6);
+            Canvas.ForceUpdateCanvases();
         }
 
     }

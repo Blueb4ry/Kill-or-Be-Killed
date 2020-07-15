@@ -9,15 +9,21 @@ namespace kobk.csharp.game.player
     public class GamePlayerMovement : NetworkBehaviour
     {
         [SerializeField] private float playerSpeed = 5f;
-        [SerializeField] private CharacterController characterController;
+        [SerializeField] private CharacterController characterController = null;
 
         private Vector2 prevMovement = Vector2.zero;
 
-        private GameControls _controls;
+        private GameControls _controls = null;
         private GameControls controls {
             get{
-                if(_controls == null)
-                    _controls = new GameControls();
+                if(_controls == null) {
+                    //_controls = controllable.getControlsObject();
+                    if(TryGetComponent<GamePlayerCharacter>(out GamePlayerCharacter c)) {
+                        _controls = c.controls;
+                    } else {
+                        throw new System.Exception();
+                    }
+                }
                 return _controls;
             }
         }

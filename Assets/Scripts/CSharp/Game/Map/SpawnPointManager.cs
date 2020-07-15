@@ -4,12 +4,23 @@ using System.Linq;
 using UnityEngine;
 using Mirror;
 using kobk.csharp.network;
+using kobk.csharp.game.player;
 
 namespace kobk.csharp.game.map
 {
     public class SpawnPointManager : NetworkBehaviour
     {
-        [SerializeField] private GameObject playerPrefab;
+        [SerializeField] private GameObject playerPrefab = null;
+
+        private NetworkManagerLobby _room;
+        private NetworkManagerLobby room
+        {
+            get
+            {
+                if (_room != null) return _room;
+                return _room = NetworkManager.singleton as NetworkManagerLobby;
+            }
+        }
 
         private static List<SpawnPoint> spawnpoints = new List<SpawnPoint>();
 
@@ -31,7 +42,12 @@ namespace kobk.csharp.game.map
             if(point == null) return;
 
             GameObject playInstance = Instantiate(playerPrefab, spawnpoints[curIndex].transform.position, spawnpoints[curIndex].transform.rotation);
+            room.gamePlayerListings.TryToGetValue(conn.identity.GetComponent<GamePlayerBase>(), out int id);
+            playInstance.GetComponent<GamePlayerCharacter>().id = id;
+
             NetworkServer.Spawn(playInstance, conn);
+
+            room.gameCharacterListings.TryAdd(id, playInstance.GetComponent<GamePlayerCharacter>());
 
             curIndex++;
         }

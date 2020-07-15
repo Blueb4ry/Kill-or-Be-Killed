@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using Mirror;
 using kobk.csharp.gui.controller;
 using kobk.csharp.game.player;
+using kobk.csharp.collections;
 
 namespace kobk.csharp.network
 {
@@ -25,17 +26,19 @@ namespace kobk.csharp.network
         [SerializeField] private LobbyListItem LobbyPlayerPrefab = null;
 
         [Header("Game")]
-        [SerializeField] private string[] gameScene;
-        [SerializeField] private string gameScenePrefix;
+        [SerializeField] private string[] gameScene = null;
+        [SerializeField] private string gameScenePrefix = null;
         [SerializeField] public int selectedGameScene = 0;
-        [SerializeField] private GamePlayerBase gamePlayerPrefab;
-        [SerializeField] private GameObject SpawnSystemPrefab;
+        [SerializeField] private GamePlayerBase gamePlayerPrefab = null;
+        [SerializeField] private GameObject SpawnSystemPrefab = null;
 
         //hidden variables
 
         //functionality
-        public List<LobbyListItem> playerListings { get; } = new List<LobbyListItem>();
-        public List<GamePlayerBase> gamePlayerListings { get; } = new List<GamePlayerBase>();
+        public DualDictionary<int, LobbyListItem> playerListings { get; } = new DualDictionary<int, LobbyListItem>();
+        public DualDictionary<int, GamePlayerBase> gamePlayerListings { get; } = new DualDictionary<int, GamePlayerBase>();
+        public DualDictionary<int, GamePlayerCharacter> gameCharacterListings { get; } = new DualDictionary<int, GamePlayerCharacter>();
+        private bool accepting = true;
 
         //events
         public static event Action OnClientConnected;
@@ -84,19 +87,14 @@ namespace kobk.csharp.network
 
             onClientDisconnected?.Invoke();
 
-            if(SceneManager.GetActiveScene().name != menuScene) {
-                SceneManager.LoadSceneAsync(menuScene, LoadSceneMode.Single);
-            }
+            // if(SceneManager.GetActiveScene().name != menuScene) {
+            //     SceneManager.LoadSceneAsync(menuScene, LoadSceneMode.Single);
+            // }
         }
 
         public override void OnServerConnect(NetworkConnection conn)
         {
-            if (numPlayers >= maxConnections)
-            {
-                conn.Disconnect();
-                return;
-            }
-            else if (SceneManager.GetActiveScene().name != menuScene)
+            if (numPlayers >= maxConnections || SceneManager.GetActiveScene().name != menuScene || !accepting)
             {
                 conn.Disconnect();
                 return;
@@ -111,6 +109,14 @@ namespace kobk.csharp.network
 
                 PlayerInstance.isLeader = playerListings.Count == 0;
 
+                int newid = 0;
+                do{
+                    newid = new System.Random().Next();
+                } while(playerListings.containsKey(newid));
+
+                PlayerInstance.id = newid;
+                
+
                 NetworkServer.AddPlayerForConnection(conn, PlayerInstance.gameObject);
             }
         }
@@ -124,6 +130,7 @@ namespace kobk.csharp.network
                     var player = conn.identity.GetComponent<GamePlayerBase>();
 
                     gamePlayerListings.Remove(player);
+                    //gamePlayerListings.Remove(gamePlayerListings.)
                 }
                 else
                 {
@@ -142,9 +149,20 @@ namespace kobk.csharp.network
             gamePlayerListings.Clear();
         }
 
+        [Obsolete("This method is obsolete, use player id to grab from DualDictionary", false)]
         public LobbyListItem getListingWithAuthority()
-        {
-            foreach (var player in playerListings)
+        { 
+            foreach (var player in playerListings.Values)
+            {
+                if (player.hasAuthority)
+                    return player;
+            }
+            return null;
+        }
+
+        [Obsolete("This method is obsolete, use player id to grab from DualDictionary", false)]
+        public GamePlayerBase getGameListingWithAuthority() {
+            foreach (var player in gamePlayerListings.Values)
             {
                 if (player.hasAuthority)
                     return player;
@@ -163,6 +181,8 @@ namespace kobk.csharp.network
 
             if (SceneManager.GetActiveScene().name == menuScene)
             {
+
+                accepting = false;
                 ServerChangeScene(gameScene[selectedGameScene]);
             }
 
@@ -173,12 +193,15 @@ namespace kobk.csharp.network
 
             if (SceneManager.GetActiveScene().name == menuScene && newScene.StartsWith(gameScenePrefix))
             {
-                for (int x = playerListings.Count - 1; x >= 0; x--)
+                int[] ids = playerListings.Keys.ToArray();
+                //for (int x = playerListings.Count - 1; x >= 0; x--)
+                for (int x = 0; x < ids.Length; x++)
                 {
-                    var roomPlayer = playerListings[x];
+                    //var roomPlayer = playerListings[x];
+                    playerListings.TryToGetValue(ids[x], out var roomPlayer);
                     var conn = roomPlayer.connectionToClient;
                     var gamePlayerInstance = Instantiate(gamePlayerPrefab);
-                    gamePlayerInstance.setupData(roomPlayer.username, roomPlayer.mode, roomPlayer.team);
+                    gamePlayerInstance.setupData(roomPlayer.username, roomPlayer.mode, roomPlayer.team, roomPlayer.id);
 
                     NetworkServer.Destroy(conn.identity.gameObject);
 

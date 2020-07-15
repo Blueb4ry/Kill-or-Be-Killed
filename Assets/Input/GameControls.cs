@@ -67,6 +67,14 @@ namespace kobk.csharp.input
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""EnableLook"",
+                    ""type"": ""Button"",
+                    ""id"": ""9dfedba3-90cc-4326-9fa3-d0f011b2cbfa"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -118,6 +126,61 @@ namespace kobk.csharp.input
                     ""name"": ""right"",
                     ""id"": ""3fca8788-749a-488d-a035-3d118309c0be"",
                     ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""IJKL"",
+                    ""id"": ""0f78c60a-71d4-42e8-91a8-76ca9a040306"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""38194ce8-80cc-4e72-a04a-86e661991f4a"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""b14ff776-6938-46ec-86a0-c5b77262a76b"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""70b5dc5b-2df8-4bb8-a4b5-06e767932e04"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""ed3bbece-fdf6-4054-8e90-a2fec4b1d8c5"",
+                    ""path"": ""<Keyboard>/l"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
@@ -179,91 +242,15 @@ namespace kobk.csharp.input
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""UI"",
-            ""id"": ""bfc2753e-2954-4e43-9dff-4d3850f82625"",
-            ""actions"": [
-                {
-                    ""name"": ""TabAction"",
-                    ""type"": ""Button"",
-                    ""id"": ""dac1a420-ac86-45b8-888d-f4fae0d3ca42"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""EnterAction"",
-                    ""type"": ""Button"",
-                    ""id"": ""d9e227d8-3873-4af2-8618-19c112f31e7b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""BackAction"",
-                    ""type"": ""Button"",
-                    ""id"": ""69196600-e1a1-4805-b39f-a81c310ae257"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""d9be4e7f-8111-4029-822c-ab892b2555d4"",
-                    ""path"": ""<Keyboard>/tab"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""TabAction"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""c939d5cc-90e4-42f1-ba59-a370049c30f2"",
-                    ""path"": ""<Keyboard>/enter"",
+                    ""id"": ""8d7b13b1-453b-4dab-b74b-8dd1c951f210"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""EnterAction"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4a35d35e-d418-4770-878a-17b3079d990a"",
-                    ""path"": ""<Keyboard>/numpadEnter"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""EnterAction"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""55c1ade5-d57d-4128-81b1-9db67469ce03"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""BackAction"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""11fecbb7-ef07-4284-81ee-9c3d72defdc2"",
-                    ""path"": ""<Keyboard>/backspace"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""BackAction"",
+                    ""groups"": """",
+                    ""action"": ""EnableLook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -297,11 +284,7 @@ namespace kobk.csharp.input
             m_Player_AtkAction = m_Player.FindAction("AtkAction", throwIfNotFound: true);
             m_Player_ChangeWeapon = m_Player.FindAction("ChangeWeapon", throwIfNotFound: true);
             m_Player_Hide = m_Player.FindAction("Hide", throwIfNotFound: true);
-            // UI
-            m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
-            m_UI_TabAction = m_UI.FindAction("TabAction", throwIfNotFound: true);
-            m_UI_EnterAction = m_UI.FindAction("EnterAction", throwIfNotFound: true);
-            m_UI_BackAction = m_UI.FindAction("BackAction", throwIfNotFound: true);
+            m_Player_EnableLook = m_Player.FindAction("EnableLook", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -357,6 +340,7 @@ namespace kobk.csharp.input
         private readonly InputAction m_Player_AtkAction;
         private readonly InputAction m_Player_ChangeWeapon;
         private readonly InputAction m_Player_Hide;
+        private readonly InputAction m_Player_EnableLook;
         public struct PlayerActions
         {
             private @GameControls m_Wrapper;
@@ -367,6 +351,7 @@ namespace kobk.csharp.input
             public InputAction @AtkAction => m_Wrapper.m_Player_AtkAction;
             public InputAction @ChangeWeapon => m_Wrapper.m_Player_ChangeWeapon;
             public InputAction @Hide => m_Wrapper.m_Player_Hide;
+            public InputAction @EnableLook => m_Wrapper.m_Player_EnableLook;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -394,6 +379,9 @@ namespace kobk.csharp.input
                     @Hide.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHide;
                     @Hide.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHide;
                     @Hide.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHide;
+                    @EnableLook.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEnableLook;
+                    @EnableLook.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEnableLook;
+                    @EnableLook.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEnableLook;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -416,59 +404,13 @@ namespace kobk.csharp.input
                     @Hide.started += instance.OnHide;
                     @Hide.performed += instance.OnHide;
                     @Hide.canceled += instance.OnHide;
+                    @EnableLook.started += instance.OnEnableLook;
+                    @EnableLook.performed += instance.OnEnableLook;
+                    @EnableLook.canceled += instance.OnEnableLook;
                 }
             }
         }
         public PlayerActions @Player => new PlayerActions(this);
-
-        // UI
-        private readonly InputActionMap m_UI;
-        private IUIActions m_UIActionsCallbackInterface;
-        private readonly InputAction m_UI_TabAction;
-        private readonly InputAction m_UI_EnterAction;
-        private readonly InputAction m_UI_BackAction;
-        public struct UIActions
-        {
-            private @GameControls m_Wrapper;
-            public UIActions(@GameControls wrapper) { m_Wrapper = wrapper; }
-            public InputAction @TabAction => m_Wrapper.m_UI_TabAction;
-            public InputAction @EnterAction => m_Wrapper.m_UI_EnterAction;
-            public InputAction @BackAction => m_Wrapper.m_UI_BackAction;
-            public InputActionMap Get() { return m_Wrapper.m_UI; }
-            public void Enable() { Get().Enable(); }
-            public void Disable() { Get().Disable(); }
-            public bool enabled => Get().enabled;
-            public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
-            public void SetCallbacks(IUIActions instance)
-            {
-                if (m_Wrapper.m_UIActionsCallbackInterface != null)
-                {
-                    @TabAction.started -= m_Wrapper.m_UIActionsCallbackInterface.OnTabAction;
-                    @TabAction.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnTabAction;
-                    @TabAction.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnTabAction;
-                    @EnterAction.started -= m_Wrapper.m_UIActionsCallbackInterface.OnEnterAction;
-                    @EnterAction.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnEnterAction;
-                    @EnterAction.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnEnterAction;
-                    @BackAction.started -= m_Wrapper.m_UIActionsCallbackInterface.OnBackAction;
-                    @BackAction.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnBackAction;
-                    @BackAction.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnBackAction;
-                }
-                m_Wrapper.m_UIActionsCallbackInterface = instance;
-                if (instance != null)
-                {
-                    @TabAction.started += instance.OnTabAction;
-                    @TabAction.performed += instance.OnTabAction;
-                    @TabAction.canceled += instance.OnTabAction;
-                    @EnterAction.started += instance.OnEnterAction;
-                    @EnterAction.performed += instance.OnEnterAction;
-                    @EnterAction.canceled += instance.OnEnterAction;
-                    @BackAction.started += instance.OnBackAction;
-                    @BackAction.performed += instance.OnBackAction;
-                    @BackAction.canceled += instance.OnBackAction;
-                }
-            }
-        }
-        public UIActions @UI => new UIActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         public InputControlScheme KeyboardMouseScheme
         {
@@ -486,12 +428,7 @@ namespace kobk.csharp.input
             void OnAtkAction(InputAction.CallbackContext context);
             void OnChangeWeapon(InputAction.CallbackContext context);
             void OnHide(InputAction.CallbackContext context);
-        }
-        public interface IUIActions
-        {
-            void OnTabAction(InputAction.CallbackContext context);
-            void OnEnterAction(InputAction.CallbackContext context);
-            void OnBackAction(InputAction.CallbackContext context);
+            void OnEnableLook(InputAction.CallbackContext context);
         }
     }
 }

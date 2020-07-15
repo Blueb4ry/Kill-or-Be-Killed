@@ -22,43 +22,43 @@ namespace kobk.csharp.gui.controller
         //Serialized Variables
         [Header("Related Objects")]
         [SerializeField] private NetworkManagerLobby networkManager = null;
-        [SerializeField] private TelepathyTransport teleTransport;
+        [SerializeField] private TelepathyTransport teleTransport = null;
 
         [Header("Play settings")]
         [SerializeField] private int minPlayers = 2;
 
         [Header("Menus")]
-        [SerializeField] private GameObject[] Menus;
+        [SerializeField] private GameObject[] Menus = null;
         [SerializeField] private int start_menu = 0;
 
         [Header("Error Menu")]
         [SerializeField] private TextMeshProUGUI errorTextDump = null;
 
         [Header("Connect Menu")]
-        [SerializeField] private TMP_InputField IpIn;
-        [SerializeField] private TMP_InputField Port_Con;
-        [SerializeField] private TMP_InputField Name_con;
+        [SerializeField] private TMP_InputField IpIn = null;
+        [SerializeField] private TMP_InputField Port_Con = null;
+        [SerializeField] private TMP_InputField Name_con = null;
 
         [Header("Host Menu")]
-        [SerializeField] private TMP_InputField Port_in;
-        [SerializeField] private IntSelector MaxPlayer;
-        [SerializeField] private TMP_InputField Name_host;
-        [SerializeField] private TextMeshProUGUI IpDump_Host;
+        [SerializeField] private TMP_InputField Port_in = null;
+        [SerializeField] private IntSelector MaxPlayer = null;
+        [SerializeField] private TMP_InputField Name_host = null;
+        [SerializeField] private TextMeshProUGUI IpDump_Host = null;
 
         [Header("Connecting Load")]
-        [SerializeField] private TextMeshProUGUI connectingLoadIpDump;
+        [SerializeField] private TextMeshProUGUI connectingLoadIpDump = null;
 
         [Header("Lobby Menu")]
-        [SerializeField] private GameObject ParentForLobbyListings;
-        [SerializeField] private Button startBtn;
-        [SerializeField] private TextChangingButton startTCBtn;
-        [SerializeField] private ImageChangingScript startIMCBtn;
-        [SerializeField] private TextChangingButton readBtn;
-        [SerializeField] private TMP_InputField NameChangeField;
-        [SerializeField] private GameObject HostGameModeFolder;
-        [SerializeField] private GameObject ClientGameModeFolder;
-        [SerializeField] private TMP_Dropdown GameModeChangeField;
-        [SerializeField] private TextMeshProUGUI GameModeClientField;
+        [SerializeField] private GameObject ParentForLobbyListings = null;
+        [SerializeField] private Button startBtn = null;
+        [SerializeField] private TextChangingButton startTCBtn = null;
+        [SerializeField] private ImageChangingScript startIMCBtn = null;
+        [SerializeField] private TextChangingButton readBtn = null;
+        [SerializeField] private TMP_InputField NameChangeField = null;
+        [SerializeField] private GameObject HostGameModeFolder = null;
+        [SerializeField] private GameObject ClientGameModeFolder = null;
+        [SerializeField] private TMP_Dropdown GameModeChangeField = null;
+        [SerializeField] private TextMeshProUGUI GameModeClientField = null;
         //[SerializeField] public Transform refTrans;
 
         //hidden variables
@@ -78,6 +78,7 @@ namespace kobk.csharp.gui.controller
         [HideInInspector]
         public bool prepedForReady = false;
         private string hostIPCheck = string.Empty;
+        public int NetId = 0;
 
         // Start is called before the first frame update
         void Start()
@@ -107,6 +108,7 @@ namespace kobk.csharp.gui.controller
                     isLeader = active.isLeader;
                     isHosting = false;
                     prepedForReady = false;
+                    NetId = active.NetId;
 
                 } else {
                     throwErrorScreen( string.IsNullOrEmpty(NetworkManagerLobby.QuitReason)? "Unexpected Disconnect" : NetworkManagerLobby.QuitReason); 
@@ -159,10 +161,6 @@ namespace kobk.csharp.gui.controller
                     updateSettingMenu();
                     break;
             }
-            // if (n == 4)
-            // {
-            //     connectingLoadIpDump.text = connectedIP;
-            // } 
         }
 
         //Quits the game
@@ -188,7 +186,7 @@ namespace kobk.csharp.gui.controller
             string ip = IpIn.text.Trim();
             string name = Name_con.text.Trim();
 
-            if (string.IsNullOrEmpty(ip) || string.IsNullOrEmpty(name) || !(ushort.TryParse(Port_in.text, out port)))
+            if (string.IsNullOrEmpty(ip) || string.IsNullOrEmpty(name) || !(ushort.TryParse(Port_Con.text, out port)))
             {
                 //if bad move to error
                 throwErrorScreen("You must enter an ip, name and port");
@@ -274,7 +272,6 @@ namespace kobk.csharp.gui.controller
             }
             else
             {
-
                 //Gamemode change
                 HostGameModeFolder.SetActive(false);
             }
@@ -282,7 +279,8 @@ namespace kobk.csharp.gui.controller
 
         public void updateSettingMenu()
         {
-            LobbyListItem i = networkManager.getListingWithAuthority();
+            //LobbyListItem i = networkManager.getListingWithAuthority();
+            networkManager.playerListings.TryToGetValue(NetId, out LobbyListItem i);
             if(i == null) return;
 
             if (isHosting)
@@ -331,7 +329,7 @@ namespace kobk.csharp.gui.controller
 
         public bool isEveryoneReady()
         {
-            foreach (var player in networkManager.playerListings)
+            foreach (var player in networkManager.playerListings.Values)
             {
                 if (!player.isReady) return false;
             }
@@ -340,18 +338,23 @@ namespace kobk.csharp.gui.controller
 
         public void Ready()
         {
-            LobbyListItem i = networkManager.getListingWithAuthority();
+            //LobbyListItem i = networkManager.getListingWithAuthority();
+            networkManager.playerListings.TryToGetValue(NetId, out LobbyListItem i);
             i.CmdSetReady(!i.isReady);
         }
 
         public void tryChangeName()
         {
-            networkManager.getListingWithAuthority().CmdSetDisplayName(NameChangeField.text);
+            /*networkManager.getListingWithAuthority()*/
+            networkManager.playerListings.TryToGetValue(NetId, out LobbyListItem i);
+            i.CmdSetDisplayName(NameChangeField.text);
         }
 
         public void tryChangeGameMode()
         {
-            networkManager.getListingWithAuthority().CmdChangeMode((GameModes)GameModeChangeField.value);
+            /*networkManager.getListingWithAuthority()*/
+            networkManager.playerListings.TryToGetValue(NetId, out LobbyListItem i);
+            i.CmdChangeMode((GameModes)GameModeChangeField.value);
         }
 
         public void DisconnectMenu()
@@ -374,13 +377,16 @@ namespace kobk.csharp.gui.controller
 
         public void attemptStart()
         {
-            networkManager.getListingWithAuthority().CmdStartGame();
+            /*networkManager.getListingWithAuthority()*/
+            networkManager.playerListings.TryToGetValue(NetId, out LobbyListItem i);
+            i.CmdStartGame();
         }
 
         private void ClientConnectCallback()
         {
             //throwErrorScreen("Success!");
             Debug.Log("Connection successful");
+
             moveTo(5);
         }
 
