@@ -7,6 +7,4 @@ Johan George: UI designer
 
 Precious Young: Character and enviromental Design
 
-Trufflerux (alias): An animation
-
 Hanna Bobis: Map Design
