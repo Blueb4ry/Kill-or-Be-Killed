@@ -93,9 +93,8 @@ namespace kobk.csharp.game.player
             controls.Player.ChangeWeapon.performed -= ctx => onChangeAtk();
         }
 
-        private event Action doUpdate;
+        protected event Action doUpdate;
 
-        [ServerCallback]
         protected virtual void Update() {
             doUpdate?.Invoke();
         }
@@ -106,7 +105,6 @@ namespace kobk.csharp.game.player
             if(!isDead)
                 ServerHandleDeath(null);
         }
-
 
         [Client]
         private void onAtkAction()

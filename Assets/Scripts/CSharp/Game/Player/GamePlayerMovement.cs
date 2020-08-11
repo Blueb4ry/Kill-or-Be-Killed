@@ -12,6 +12,10 @@ namespace kobk.csharp.game.player
         [SerializeField] private CharacterController characterController = null;
 
         private Vector2 prevMovement = Vector2.zero;
+        
+        [HideInInspector]
+        [SyncVar]
+        public bool MovementEnabled = true;
 
         private GameControls _controls = null;
         private GameControls controls {
@@ -31,23 +35,27 @@ namespace kobk.csharp.game.player
         public override void OnStartAuthority() {
             enabled = true;
 
-            controls.Player.Move.performed += ctx => setMovement(ctx.ReadValue<Vector2>());
-            controls.Player.Move.canceled += ctx => resetMovement();
+            controls.Player.Move.performed += ctx => CmdSetMovement(ctx.ReadValue<Vector2>());
+            controls.Player.Move.canceled += ctx => CmdResetMovement();
         }
 
         [ClientCallback]
         private void OnEnable() => controls.Enable();
         [ClientCallback]
         private void onDisable() => controls.Disable();
-        [ClientCallback]
+        [ServerCallback]
         private void Update() => move();
 
-        [Client]
-        private void setMovement(Vector2 n) => prevMovement = n.normalized;
-        [Client]
-        private void resetMovement() => prevMovement = Vector2.zero;
+        [Command]
+        private void CmdSetMovement(Vector2 n) {
+            if(MovementEnabled)
+                prevMovement = n.normalized;
+        }
 
-        [Client]
+        [Command]
+        private void CmdResetMovement() => prevMovement = Vector2.zero;
+
+        [Server]
         private void move() {
             Vector3 right = characterController.transform.right;
             Vector3 up = characterController.transform.up;
