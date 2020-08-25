@@ -6,6 +6,7 @@ using Mirror;
 using kobk.csharp.network;
 using kobk.csharp.game.player;
 using kobk.csharp.game.enumerations;
+using kobk.csharp.gui.game;
 
 namespace kobk.csharp.game.map
 {
@@ -54,23 +55,28 @@ namespace kobk.csharp.game.map
                 if (team == 1)
                 {
                     playInstance = Instantiate(SoldierPrefab, spawnpoints[curIndex].transform.position, spawnpoints[curIndex].transform.rotation);
+                    UserUIManager.instance.setUI(UserUIManager.SOLDIER);
                 }
                 else if (team == 2)
                 {
                     playInstance = Instantiate(NinjaPrefab, spawnpoints[curIndex].transform.position, spawnpoints[curIndex].transform.rotation);
+                    UserUIManager.instance.setUI(UserUIManager.NINJA);
                 }
                 else
                 {
                     playInstance = Instantiate(NinjaPrefab, spawnpoints[curIndex].transform.position, spawnpoints[curIndex].transform.rotation);
+                    UserUIManager.instance.setUI(UserUIManager.NINJA);
                 }
             }
             else if (mode == GameModes.ALL_NINJA || mode == GameModes.ALL_NINJA_TEAMS)
             {
                 playInstance = playInstance = Instantiate(NinjaPrefab, spawnpoints[curIndex].transform.position, spawnpoints[curIndex].transform.rotation);
+                UserUIManager.instance.setUI(UserUIManager.NINJA);
             }
             else 
             {
                 playInstance = playInstance = Instantiate(NinjaPrefab, spawnpoints[curIndex].transform.position, spawnpoints[curIndex].transform.rotation);
+                UserUIManager.instance.setUI(UserUIManager.NINJA);
             }
 
             //GameObject playInstance = Instantiate(playerPrefab, spawnpoints[curIndex].transform.position, spawnpoints[curIndex].transform.rotation);
