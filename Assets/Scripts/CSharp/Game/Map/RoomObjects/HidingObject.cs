@@ -9,6 +9,8 @@ namespace kobk.csharp.game.roomObjects
     public class HidingObject : MonoBehaviour
     {
         [SerializeField] private NetworkSoundSource aSource = null;
+        [SerializeField] private string OutlineParam = string.Empty;
+        [SerializeField] public Transform TeleportLocation = null;
         //[SerializeField] private AudioClip[] aClips = null;
 
         private System.Random rnd = new System.Random();
@@ -28,7 +30,7 @@ namespace kobk.csharp.game.roomObjects
         }
 
         public void setPop(bool s) {
-            render.material.SetFloat("DoOutline", s ? 1f : 0f);
+            render.material.SetFloat(OutlineParam, s ? 1f : 0f);
         }
 
         public void playSound() {

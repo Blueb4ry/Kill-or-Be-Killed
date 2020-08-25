@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: 598474223219316541}
   - component: {fileID: 1999917343832533428}
   - component: {fileID: 4987199970807050559}
+  - component: {fileID: -1181256833847519227}
   m_Layer: 0
   m_Name: Ninja
   m_TagString: Untagged
@@ -170,7 +171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  clientAuthority: 1
+  clientAuthority: 0
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
@@ -196,6 +197,13 @@ MonoBehaviour:
   id: 0
   ammo: 3
   playerMovement: {fileID: 1999917343832533428}
+  sprite: {fileID: 7884430144638476067}
+  maxDistanceHideJump: 20
+  proxChecker: {fileID: -1181256833847519227}
+  hidingObjectLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  isHiding: 0
 --- !u!143 &598474223219316541
 CharacterController:
   m_ObjectHideFlags: 0
@@ -252,6 +260,23 @@ MonoBehaviour:
   VerticalLookZonePercent: 0.2
   HorizontalLookDistance: 2
   VerticalLookDistance: 1
+--- !u!114 &-1181256833847519227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3316480735272180832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1731d8de2d0c84333b08ebe1e79f4118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  visRange: 20
+  visUpdateInterval: 0.1
+  forceHidden: 0
 --- !u!1 &6344120861279667589
 GameObject:
   m_ObjectHideFlags: 0

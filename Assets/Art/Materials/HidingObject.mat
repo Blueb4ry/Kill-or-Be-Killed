@@ -62,7 +62,7 @@ Material:
     - Vector1_82AD581A: 0.5
     - Vector1_90B8028C: 0.008
     - Vector1_9AD7C52C: 0.008
-    - Vector1_D5C7797D: 1
+    - Vector1_D5C7797D: 0
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1

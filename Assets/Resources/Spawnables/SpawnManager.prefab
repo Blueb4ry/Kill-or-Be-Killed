@@ -48,6 +48,10 @@ MonoBehaviour:
   syncInterval: 0.1
   playerPrefab: {fileID: 3316480735272180832, guid: c0763e42aeaf57946a2b69ba4a202c14,
     type: 3}
+  NinjaPrefab: {fileID: 3316480735272180832, guid: c0763e42aeaf57946a2b69ba4a202c14,
+    type: 3}
+  SoldierPrefab: {fileID: 2703903863732349099, guid: 2d6397e24236fb445a95663259068c43,
+    type: 3}
 --- !u!114 &7474889431415959710
 MonoBehaviour:
   m_ObjectHideFlags: 0

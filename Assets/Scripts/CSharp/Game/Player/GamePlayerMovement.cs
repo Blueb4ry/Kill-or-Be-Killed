@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using kobk.csharp.input;
+using System;
 
 namespace kobk.csharp.game.player
 {
@@ -10,6 +11,7 @@ namespace kobk.csharp.game.player
     {
         [SerializeField] private float playerSpeed = 5f;
         [SerializeField] private CharacterController characterController = null;
+        public event Action onMoveAttempt;
 
         private Vector2 prevMovement = Vector2.zero;
         
@@ -48,8 +50,8 @@ namespace kobk.csharp.game.player
 
         [Command]
         private void CmdSetMovement(Vector2 n) {
-            if(MovementEnabled)
-                prevMovement = n.normalized;
+            onMoveAttempt?.Invoke();
+            prevMovement = n.normalized;
         }
 
         [Command]
@@ -57,15 +59,18 @@ namespace kobk.csharp.game.player
 
         [Server]
         private void move() {
-            Vector3 right = characterController.transform.right;
-            Vector3 up = characterController.transform.up;
+            if (MovementEnabled)
+            {
+                Vector3 right = characterController.transform.right;
+                Vector3 up = characterController.transform.up;
 
-            right.z = 0f;
-            up.z = 0f;
+                right.z = 0f;
+                up.z = 0f;
 
-            Vector3 resultantMovement = right.normalized * prevMovement.x + up.normalized * prevMovement.y;
+                Vector3 resultantMovement = right.normalized * prevMovement.x + up.normalized * prevMovement.y;
 
-            characterController.Move(resultantMovement * playerSpeed * Time.deltaTime);
+                characterController.Move(resultantMovement * playerSpeed * Time.deltaTime);
+            }
         }
 
     }

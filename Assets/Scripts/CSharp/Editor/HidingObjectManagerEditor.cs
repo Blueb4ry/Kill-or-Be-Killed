@@ -14,19 +14,19 @@ namespace kobk.csharp.editor
 		{
 			base.OnInspectorGUI();
 
-			if(GUILayout.Button("Check and Add hiding objects"))
+			if (GUILayout.Button("Check and Add hiding objects"))
 			{
 				if (target is null)
 					return;
 
-				HidingObjectManager man = (HidingObjectManager) target;
+				HidingObjectManager man = (HidingObjectManager)target;
 
 				HidingObject[] newList = GameObject.FindObjectsOfType<HidingObject>();
 
 				//man.hidingObjects.Clear();
 				//man.hidingObjects.AddRange(GameObject.FindObjectsOfType<HidingObject>());
 
-				for(int x = 0; x < newList.Length; x++)
+				for (int x = 0; x < newList.Length; x++)
 				{
 					newList[x].networkhideId = x;
 				}
@@ -34,6 +34,10 @@ namespace kobk.csharp.editor
 				man.hidingObjects = newList;
 
 				Debug.Log("Found all hiding objects");
+
+				//Record changes
+				Undo.RecordObject(target, "HidingObjectManager find all objects");
+				EditorUtility.SetDirty(target);
 			}
 		}
 

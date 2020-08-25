@@ -5,12 +5,15 @@ using UnityEngine;
 using Mirror;
 using kobk.csharp.network;
 using kobk.csharp.game.player;
+using kobk.csharp.game.enumerations;
 
 namespace kobk.csharp.game.map
 {
     public class SpawnPointManager : NetworkBehaviour
     {
         [SerializeField] private GameObject playerPrefab = null;
+        [SerializeField] private GameObject NinjaPrefab = null;
+        [SerializeField] private GameObject SoldierPrefab = null;
 
         private NetworkManagerLobby _room;
         private NetworkManagerLobby room
@@ -41,8 +44,37 @@ namespace kobk.csharp.game.map
 
             if(point == null) return;
 
-            GameObject playInstance = Instantiate(playerPrefab, spawnpoints[curIndex].transform.position, spawnpoints[curIndex].transform.rotation);
-            room.gamePlayerListings.TryToGetValue(conn.identity.GetComponent<GamePlayerBase>(), out int id);
+            GamePlayerBase baseObject = conn.identity.GetComponent<GamePlayerBase>();
+            GameModes mode = baseObject.mode;
+            GameObject playInstance = null;
+            if (mode == GameModes.NORMAL)
+            {
+                int team = baseObject.team;
+                //if soldier team
+                if (team == 1)
+                {
+                    playInstance = Instantiate(SoldierPrefab, spawnpoints[curIndex].transform.position, spawnpoints[curIndex].transform.rotation);
+                }
+                else if (team == 2)
+                {
+                    playInstance = Instantiate(NinjaPrefab, spawnpoints[curIndex].transform.position, spawnpoints[curIndex].transform.rotation);
+                }
+                else
+                {
+                    playInstance = Instantiate(NinjaPrefab, spawnpoints[curIndex].transform.position, spawnpoints[curIndex].transform.rotation);
+                }
+            }
+            else if (mode == GameModes.ALL_NINJA || mode == GameModes.ALL_NINJA_TEAMS)
+            {
+                playInstance = playInstance = Instantiate(NinjaPrefab, spawnpoints[curIndex].transform.position, spawnpoints[curIndex].transform.rotation);
+            }
+            else 
+            {
+                playInstance = playInstance = Instantiate(NinjaPrefab, spawnpoints[curIndex].transform.position, spawnpoints[curIndex].transform.rotation);
+            }
+
+            //GameObject playInstance = Instantiate(playerPrefab, spawnpoints[curIndex].transform.position, spawnpoints[curIndex].transform.rotation);
+            room.gamePlayerListings.TryToGetValue(baseObject, out int id);
             playInstance.GetComponent<GamePlayerCharacter>().id = id;
 
             NetworkServer.Spawn(playInstance, conn);
