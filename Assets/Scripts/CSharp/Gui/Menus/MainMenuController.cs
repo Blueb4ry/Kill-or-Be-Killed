@@ -149,7 +149,8 @@ namespace kobk.csharp.gui.controller
                 case 2:
                     if (string.IsNullOrEmpty(hostIPCheck))
                     {
-                        hostIPCheck = new WebClient().DownloadString("http://icanhazip.com").Trim();
+                        string[] webstrings = new WebClient().DownloadString("http://ip4only.me/api/").Trim().Split(',');
+                        hostIPCheck = webstrings[1];
                     }
                     IpDump_Host.text = hostIPCheck;
                     break;
